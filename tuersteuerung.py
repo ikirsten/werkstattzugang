@@ -1,6 +1,10 @@
 #---import---
 import config #config file
 import time #time module
+import holidays # python library holdiays
+
+from datetime import date
+
 
 
 
@@ -23,7 +27,10 @@ def timecheck():
 	#Pruefen der Uhrzeit	
 	if  time.strftime("%H:%M") < end and start < time.strftime("%H:%M"):
 		if time2min(end) - time2min(time.strftime("%H:%M")) > time2min(config.accesstimes['endbefore']):
-			check = 1	#Ausgabe, wenn im Zeitraum
+			
+			#Wenn Uhrzeit passt, pruefen ob Feiertag mit libary holidays
+			if not date(int(time.strftime("%Y")),int(time.strftime("%m")),int(time.strftime("%d"))) in config.accesstimes['feiertage']:
+				check = 1	#Ausgabe, wenn im Zeitraum
 		else:
 			check = 0	#Ausgabe, wenn zu knapp vor Ende
 	else:
@@ -35,4 +42,3 @@ def timecheck():
 def time2min(x):
    return reduce(lambda a, b: 60 * int(a) + int(b), x.split(':'))
 
-print(timecheck())

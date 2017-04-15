@@ -1,8 +1,9 @@
-
+import holidays
 
 #---Access times---
 
 accesstimes = dict(
+	feiertage	= holidays.DE(prov='BW'),
 	startweekdays	= '07:00', #Starttime on weekdays
 	endweekdays	= '21:30', #Endtime on weekdays
 	startsaturday	= '08:00', #Starttime on saturdays
