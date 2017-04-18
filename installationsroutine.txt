@@ -1,5 +1,5 @@
 #Python Libarys
-pip install holidays
+sudo pip install holidays
 
 
 sudo apt-get -y install subversion autoconf debhelper flex libusb-dev libpcsclite-dev libpcsclite1 libccid pcscd pcsc-tools libpcsc-perl libusb-1.0-0-dev libtool libssl-dev cmake checkinstall

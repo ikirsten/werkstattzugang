@@ -4,8 +4,18 @@ import os #OS module
 import time #time module
 import holidays # python library holdiays
 
+import rfidiot # rfidiot nfc tools
+
 from datetime import date
 
+
+##test
+try:
+	card=rfidiot.card
+	card.select()
+	print(card.uid)
+except:
+	print("keine Karte")
 
 
 
