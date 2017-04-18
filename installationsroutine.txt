@@ -22,4 +22,12 @@ sudo apt-get install libusb-0.1-4
 
 sudo dpkg -i ../libnfc*.deb
 
-nfc-list
+---------
+sudo touch /etc/modprobe.d/nfcreader.conf
+sudo nano /etc/modprobe.d/nfcreader.conf
+
+Einfügen:
+blacklist pn533
+blacklist nfc
+
+--> Speichern & Neustarten
