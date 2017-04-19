@@ -1,21 +1,34 @@
-#---import---
+#--import---
 import config #config file
 import os #OS module
 import time #time module
 import holidays # python library holdiays
+import rfidiot
 
-import rfidiot # rfidiot nfc tools
 
 from datetime import date
 
 
-##test
-try:
+
+
+card=rfidiot.card
+card.select()
+print("Wating for Card")
+#print(card)	
+#print(card.uid)
+while not card.uid:
 	card=rfidiot.card
 	card.select()
-	print(card.uid)
-except:
-	print("keine Karte")
+	time.sleep(0.1)
+
+card=rfidiot.card
+card.select()
+
+if card.uid == '049771B28C2F80':
+	print("OK")
+else:
+	print("NOK")
+
 
 
 
