@@ -8,28 +8,25 @@ import rfidiot
 
 from datetime import date
 
+#Test UID
+print (getuid)
 
 
-
-card=rfidiot.card
-card.select()
-print("Wating for Card")
-#print(card)	
-#print(card.uid)
-while not card.uid:
+#Uid aus Cardreader lesen
+def getuid():
 	card=rfidiot.card
 	card.select()
-	time.sleep(0.1)
+	
+	#Schleife - wenn keine uid vorhanden so lange lesen bis uid vorhanden, nach jedem Versuch 0.1 sek warten
+	while not card.uid:
+		card=rfidiot.card
+		card.select()
+		time.sleep(0.1)
 
-card=rfidiot.card
-card.select()
-
-if card.uid == '049771B28C2F80':
-	print("OK")
-else:
-	print("NOK")
-
-
+	card=rfidiot.card
+	card.select()
+	return card.uid
+	
 
 
 def timecheck():
