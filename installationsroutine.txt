@@ -1,5 +1,8 @@
 #Python Libarys
-pip install holidahttps://github.com/AdamLaurie/RFIDIOtys
+
+pip install holidays
+
+https://github.com/AdamLaurie/RFIDIOtys
 
 
 #folgendes prüfen:

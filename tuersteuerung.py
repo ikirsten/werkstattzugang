@@ -1,11 +1,29 @@
-#---import---
+#--import---
 import config #config file
+import os #OS module
 import time #time module
 import holidays # python library holdiays
+import rfidiot
+
 
 from datetime import date
 
 
+#Uid aus Cardreader lesen
+def getuid():
+	card=rfidiot.card
+	card.select()
+	
+	#Schleife - wenn keine uid vorhanden so lange lesen bis uid vorhanden, nach jedem Versuch 0.1 sek warten
+	while not card.uid:
+		card=rfidiot.card
+		card.select()
+		time.sleep(0.1)
+
+	card=rfidiot.card
+	card.select()
+	return card.uid
+	
 
 
 def timecheck():
@@ -42,3 +60,11 @@ def timecheck():
 def time2min(x):
    return reduce(lambda a, b: 60 * int(a) + int(b), x.split(':'))
 
+
+
+
+
+
+
+####Test
+print(getuid())
