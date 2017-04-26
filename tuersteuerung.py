@@ -1,6 +1,8 @@
 #--import---
 import config #config file
+
 import os #OS module
+import MySQLdb #MySQL connection library 
 import time #time module
 import holidays # python library holdiays
 import rfidiot
@@ -61,6 +63,9 @@ def time2min(x):
    return reduce(lambda a, b: 60 * int(a) + int(b), x.split(':'))
 
 
+
+
+##Database Connection Object
 
 
 

@@ -13,6 +13,9 @@ accesstimes = dict(
 
 
 
-
-
-
+database = dict(
+	username	= 'werkstattpi',
+	password	= '123456',
+	hostname	= 'amsev.de',
+	tablename	= 'zugangwerke',
+)
