@@ -8,9 +8,6 @@ import rfidiot
 
 from datetime import date
 
-#Test UID
-print (getuid)
-
 
 #Uid aus Cardreader lesen
 def getuid():
@@ -63,3 +60,11 @@ def timecheck():
 def time2min(x):
    return reduce(lambda a, b: 60 * int(a) + int(b), x.split(':'))
 
+
+
+
+
+
+
+####Test
+print(getuid())
