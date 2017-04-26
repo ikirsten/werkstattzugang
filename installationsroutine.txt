@@ -1,33 +1,15 @@
 #Python Libarys
-sudo pip install holidays
+
+pip install holidays
+
+https://github.com/AdamLaurie/RFIDIOtys
 
 
+#folgendes prüfen:
 sudo apt-get -y install subversion autoconf debhelper flex libusb-dev libpcsclite-dev libpcsclite1 libccid pcscd pcsc-tools libpcsc-perl libusb-1.0-0-dev libtool libssl-dev cmake checkinstall
 
-#Libnfc (Quelle: http://nfc-tools.org/index.php?title=Libnfc)
-sudo apt-get install libusb-dev dh-autoreconf
 
-git clone https://github.com/nfc-tools/libnfc.git
-cd libnfc
-git checkout libnfc-1.7.1
-git clean -d -f -x
-#rm ../libnfc*.deb
-git remote|grep -q anonscm||git remote add anonscm git://anonscm.debian.org/collab-maint/libnfc.git
-git fetch anonscm
-git checkout remotes/anonscm/master debian
-git reset
-dpkg-buildpackage -uc -us -b
+sudo apt-get install python-pyscard
 
-sudo apt-get install libusb-0.1-4
-
-sudo dpkg -i ../libnfc*.deb
-
----------
-sudo touch /etc/modprobe.d/nfcreader.conf
-sudo nano /etc/modprobe.d/nfcreader.conf
-
-Einfügen:
-blacklist pn533
-blacklist nfc
-
---> Speichern & Neustarten
+#RFIDIOT installieren http://www.rfidiot.org/ | https://github.com/AdamLaurie/RFIDIOt
+Verzeichnis rfidiot in Programmverzteichnis kopieren
