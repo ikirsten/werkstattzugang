@@ -66,6 +66,11 @@ def time2min(x):
 
 
 ##Database Connection Object
+#Benutzt Daten aus der config Datei, um eine Verbindung zur Datenbank herzustellen
+db = MySQLdb.connect(	host=config.database['host'],
+			user=config.dabase['username'],
+			passwd=config.database['password'],
+			db=config.dabatabe['databasename'])
 
 
 

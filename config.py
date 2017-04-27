@@ -11,11 +11,9 @@ accesstimes = dict(
 	endbefore	= '00:10', #Letzerzugang vor Ende Eintrittszeit
 )
 
-
-
 database = dict(
-	username	= 'werkstattpi',
-	password	= '123456',
-	hostname	= 'amsev.de',
-	tablename	= 'zugangwerke',
+	username	= 'testamspi',
+	password	= 'Qnu4g34!',
+	host		= 'amsev.de',
+	databasename	= 'testwerke',
 )
