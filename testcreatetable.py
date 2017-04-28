@@ -14,6 +14,7 @@ c=db.cursor()
 #id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 #AMSID VARCHAR (128) NOT NULL default '');""");
 
+#
 tablecreation = """
 CREATE TABLE IF NOT EXISTS werketest (
 ams_id INTEGER PRIMARY KEY,
