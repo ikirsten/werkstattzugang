@@ -78,8 +78,20 @@ c=db.cursor()
 
 
 ####Test
+
+#Scritpstart ins Log schreiben
 log_scriptstart = """
-INSERT INTO werkelog 
+INSERT INTO werkelog (
+typ, meldung)
+Values
+('TUERSYSTEM', 'Script wurde gestartet');"""
+c.execute(log_scriptstart)
+db.commit()
+
+
 
 
 print(getuid())
+
+c.close()
+db.close()
