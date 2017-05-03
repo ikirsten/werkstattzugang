@@ -72,9 +72,14 @@ db = MySQLdb.connect(	host=config.database['host'],
 			passwd=config.database['password'],
 			db=config.dabatabe['databasename'])
 
-
+#Cursor Object
+c=db.cursor()
 
 
 
 ####Test
+log_scriptstart = """
+INSERT INTO werkelog 
+
+
 print(getuid())
