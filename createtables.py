@@ -63,13 +63,13 @@ CREATE TABLE IF NOT EXISTS cards (
 ams_nr SMALLINT UNSIGNED PRIMARY KEY,
 berechtigung VARCHAR (8));"""
 
+c.execute(card_userrights)
 
 #LOG Tabelle erstellen
 werkelog = """
 CREATE TABLE IF NOT EXISTS werkelog (
 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-datum DATE,
-zeit TIME,
+log_datum TIMESTAMP NOT NULL DEFAULT NOW(),
 typ VARCHAR (32),
 meldung CHAR);"""
 
