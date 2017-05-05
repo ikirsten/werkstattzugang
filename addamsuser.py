@@ -4,6 +4,8 @@ import config #config file
 import os #OS module
 import MySQLdb #MySQL connection library 
 import rfidiot
+import time
+
 
 #getuid
 def getuid():
@@ -29,9 +31,12 @@ db = MySQLdb.connect(	host=config.database['host'],
 c=db.cursor()
 	
 #Werte von User abfragen
-ams = input('AMS-Mitgliedsnummer: ')
-role = input('NO,AMS,ADMIN: ')
+ams = int(input("AMS-Mitgliedsnummer: "))
+
+role = raw_input("Berechtigung: ")
+
 carduid = getuid()
+print(carduid)
 
 #Karte in cards hinzufuegen
 adduser = """

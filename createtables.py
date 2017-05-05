@@ -50,9 +50,8 @@ c.execute(ams_mitglieder)
 #Tabelle erstellen mit den UIDs der RFID Karten
 cards = """
 CREATE TABLE IF NOT EXISTS cards (
-id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-ams_nr SMALLINT UNSIGNED,
-cards_uid CHAR(8));"""
+ams_nr SMALLINT UNSIGNED NOT NULL,
+cards_uid CHAR(16) NOT NULL PRIMARY KEY);"""
 
 c.execute(cards)
 
@@ -61,7 +60,7 @@ c.execute(cards)
 cards_userrights = """
 CREATE TABLE IF NOT EXISTS cards_userrights (
 ams_nr SMALLINT UNSIGNED PRIMARY KEY,
-berechtigung VARCHAR (8));"""
+berechtigung VARCHAR (16));"""
 
 c.execute(cards_userrights)
 
