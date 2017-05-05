@@ -1,6 +1,8 @@
 #--import---
 import config #config file
+
 import os #OS module
+import MySQLdb #MySQL connection library 
 import time #time module
 import holidays # python library holdiays
 import rfidiot
@@ -63,8 +65,64 @@ def time2min(x):
 
 
 
+##Database Connection Object
+#Benutzt Daten aus der config Datei, um eine Verbindung zur Datenbank herzustellen
+db = MySQLdb.connect(	host=config.database['host'],
+			user=config.database['username'],
+			passwd=config.database['password'],
+			db=config.database['databasename'])
+
+#Cursor Object
+c=db.cursor()
 
 
 
-####Test
-print(getuid())
+
+#LOG Scritpstart
+log_scriptstart = """
+INSERT INTO werkelog (
+typ, meldung)
+Values
+('TUERSYSTEM', 'Script wurde gestartet');"""
+
+#LOG Karte gelesen
+log_cardread = """
+INSERT INTO werkelog (
+typ, meldung)
+Values
+('TUER', 'Karte gelesen: ' %s);"""
+
+
+
+
+#Testablauf
+
+#Varbiable card initalisieren
+card = ''
+
+
+#Log scriptstart schreiben
+c.execute(log_scriptstart)
+db.commit()
+
+#Dauerschleife initalisieren
+#while True:
+	
+#Karte lesen und in Varibale schreiben. Danach ist Leser deaktiviert
+card = getuid()
+	
+#Gelesene Karte in Datenbank schreiben
+c.execute(log_cardread, (card))
+db.commit()
+
+	
+	
+print(card)
+	
+card=''
+
+
+
+
+c.close()
+db.close()
