@@ -59,11 +59,17 @@ c.execute(cards)
 
 #Tabelle mit Berechitungen erstellen
 cards_userrights = """
-CREATE TABLE IF NOT EXISTS cards (
+CREATE TABLE IF NOT EXISTS cards_userrights (
 ams_nr SMALLINT UNSIGNED PRIMARY KEY,
 berechtigung VARCHAR (8));"""
 
-c.execute(card_userrights)
+c.execute(cards_userrights)
+
+#Log Tabelle loeschen
+#deletewerkelog = """
+#Drop TABLE werkelog; """
+
+#c.execute(deletewerkelog)
 
 #LOG Tabelle erstellen
 werkelog = """
@@ -71,9 +77,10 @@ CREATE TABLE IF NOT EXISTS werkelog (
 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 log_datum TIMESTAMP NOT NULL DEFAULT NOW(),
 typ VARCHAR (32),
-meldung CHAR);"""
+meldung VARCHAR (128));"""
 
 c.execute(werkelog)
+
 
 c.close()
 db.close()

@@ -68,30 +68,61 @@ def time2min(x):
 ##Database Connection Object
 #Benutzt Daten aus der config Datei, um eine Verbindung zur Datenbank herzustellen
 db = MySQLdb.connect(	host=config.database['host'],
-			user=config.dabase['username'],
+			user=config.database['username'],
 			passwd=config.database['password'],
-			db=config.dabatabe['databasename'])
+			db=config.database['databasename'])
 
 #Cursor Object
 c=db.cursor()
 
 
 
-####Test
 
-#Scritpstart ins Log schreiben
+#LOG Scritpstart
 log_scriptstart = """
 INSERT INTO werkelog (
 typ, meldung)
 Values
 ('TUERSYSTEM', 'Script wurde gestartet');"""
+
+#LOG Karte gelesen
+log_cardread = """
+INSERT INTO werkelog (
+typ, meldung)
+Values
+('TUER', 'Karte gelesen: ' %s);"""
+
+
+
+
+#Testablauf
+
+#Varbiable card initalisieren
+card = ''
+
+
+#Log scriptstart schreiben
 c.execute(log_scriptstart)
 db.commit()
 
+#Dauerschleife initalisieren
+#while True:
+	
+#Karte lesen und in Varibale schreiben. Danach ist Leser deaktiviert
+card = getuid()
+	
+#Gelesene Karte in Datenbank schreiben
+c.execute(log_cardread, (card))
+db.commit()
+
+	
+	
+print(card)
+	
+card=''
 
 
 
-print(getuid())
 
 c.close()
 db.close()
