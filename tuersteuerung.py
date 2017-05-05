@@ -58,10 +58,16 @@ def timecheck():
 
 	#Rueckgabe des Ergebniss	
 	return bool(check)
-
 def time2min(x):
    return reduce(lambda a, b: 60 * int(a) + int(b), x.split(':'))
 
+
+##Eventprozedur
+
+
+##Eventdeklarationen
+#Beispieldeklaration
+#GPIO.add_event_detect(18, GPIO.BOTH, callback = doIfHigh, bouncetime = 200)
 
 
 
@@ -91,7 +97,6 @@ INSERT INTO werkelog (
 typ, meldung)
 Values
 ('TUER', 'Karte gelesen: ' %s);"""
-
 
 
 
