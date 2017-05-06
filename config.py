@@ -11,9 +11,14 @@ accesstimes = dict(
 	endbefore	= '00:10', #Letzerzugang vor Ende Eintrittszeit
 )
 
+#Karten, die ohne pruefung zur oeffnung der Tuer fuehren
+mastercards = {'63827184': 'Karte 1',}
+
+
 database = dict(
 	username	= 'testamspi',
 	password	= 'Qnu4g34!',
 	host		= 'amsev.de',
 	databasename	= 'testwerke',
 )
+

@@ -83,7 +83,7 @@ c=db.cursor()
 
 
 
-##LOG Definitionen
+
 #LOG Scritpstart
 log_scriptstart = """
 INSERT INTO werkelog (
@@ -98,25 +98,12 @@ typ, meldung)
 Values
 ('TUER', 'Karte gelesen: ' %s);"""
 
-#Log root Karte verwendet
-log_rootcard = """
-INSERT INTO werkelog (
-typ, meldung)
-Values
-('TUER', 'ROOT Card: ' %s ' gelesen.');""" 
 
-
-##SQL Suchabrfagen Definition
-
-#Karten UID Suchen und AMSID ausgaben
-search_uid = """
-SELECT ams_nr FROM cards WHERE cards_uid = %s"""
-
-#Berechtigungen der AMSID suchen
-search_permission = """
-select berechtigung FROM cards_userrights WHERE ams_nr = %s"""
 
 #Testablauf
+
+#Varbiable card initalisieren
+card = ''
 
 
 #Log scriptstart schreiben
@@ -129,34 +116,16 @@ db.commit()
 #Karte lesen und in Varibale schreiben. Danach ist Leser deaktiviert
 card = getuid()
 	
-#Gelesene Karte in Log-Datenbank schreiben
+#Gelesene Karte - LOG in Datenbank schreiben
 c.execute(log_cardread, (card))
 db.commit()
 
-#Pruefen ob root Karte
-if card in config.mastercards:
-	#Ins Log schreiben
-	c.execute(log_rootcard, (config.mastercards[card]))
-	db.commit()
-	
-	##--- Tuer oeffnen
-	##--- E-Mail versenden
-	##--- LEDs steuern
-
-else:
-	#Pueren, ob uid in DB
-	if c.execute(search_uid, (card)):
-		#Wenn UID in DB, amsid abfragen
-		amsnr = str(c.fetchone()[0])
-		print(amsnr)
-		if c.execute(search_permission, (amsnr)):
-			permission = str(c.fetchone()[0])
-			print(permission)
+#
 	
 	
 print(card)
 	
-
+card=''
 
 
 
