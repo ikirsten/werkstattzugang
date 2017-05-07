@@ -13,3 +13,7 @@ sudo apt-get install python-pyscard
 
 #RFIDIOT installieren http://www.rfidiot.org/ | https://github.com/AdamLaurie/RFIDIOt
 Verzeichnis rfidiot in Programmverzteichnis kopieren
+
+#Python Excel Read Modul um die AMS Datentabelle zu lesen
+#veraltet sudo apt-get install python-xlrd
+pip install openpyxl
