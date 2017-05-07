@@ -67,7 +67,7 @@ def time2min(x):
 
 
 #Funktion zum oeffnen der Tuer
-def dooropen(name):
+def dooropen():
 	print("Tuer Offen")
 	#Schieberegister ansteuern
 	#LEDs schalten
@@ -153,7 +153,7 @@ search_permission = """
 select berechtigung FROM cards_userrights WHERE ams_nr = %s"""
 
 #User der AMSID suchen
-search:user = """
+search_user = """
 select vorname, nachname, email, mobil FROM ams_mitglieder WHERE ams_nr = %s"""
 
 
@@ -189,13 +189,15 @@ if card in config.mastercards:
 	db.commit()
 	
 	##--- E-Mail versenden
-´	dooropen(config.mastercards[card])
+	dooropen(config.mastercards[card])
 	##--- LEDs steuern
 
 else:
 	#Pruefen, ob uid in DB und attribute eruieren
 	if c.execute(search_uid, (card)):
-
+		
+		#Folgendes wird ausgefuert, wenn Karte gefunden wurde
+			
 		#Wenn UID in DB, amsid abfragen
 		amsnr = str(c.fetchone()[0])
 		print(amsnr)
@@ -203,25 +205,49 @@ else:
 		#Berechtigung pruefen und Abfragen
 		if c.execute(search_permission, (amsnr)):
 			permission = str(c.fetchone()[0])
-			print(permission)
+			#print(permission)
 		else:
 			#Fehler ins Log schreiben: keine Berechtigungen definiert
-			c.execute(card_error, ('Keine Berechtigung fuer KARTE: ' card ' und AMS NR: ' amsnr '  definiert.')
+			c.execute(card_error, ('Keine Berechtigung fuer KARTE: ' + card +  'und AMS NR: ' + amsnr + ' definiert.'))
 			db.commit()
 		
 		#Daten aus AMS Datenbank ababfragen
-		if c.execute(search_permission, (amsnr)):
-			user-vorname = str(c.fetchone() [0])
-			user-nachname = str(c.fetchone() [1])
-			user-email = str(c.fetchone() [2])
-			user-mobil = str(c.fetchone() [3])
-			print(user-vorname ' ' user-nachname ' ' user-email ' ' user-mobil)
+		if c.execute(search_user, (amsnr)):
+			user = c.fetchall()[0]
+			#print(user[0] + ' ' + user[1] + ' ' + user[2] + ' ' + user[3])
+		else:
+			print("Fehler")
+			#Fehler ins log schreiben
+			c.execute(card_error, ('Keine AMS Daten fuer KARTE: ' + card + ' und AMS NR: ' + amsnr + 'definiert'))
+			db.commit()
+		
+		
+		#Tueroffnungsszenarien nach Berechtigung
+		
+		#Admin
+		if permission == 'admin':
+			dooropen()
+		
+		#ams
+		if permission == 'ams':
+			if timecheck ():
+				dooropen()
+			else:
+				print("Ausserhalb oeffnungszeiten")
+		
+		#gesperrt
+		if permission == 'gesperrt':
+			print()
+		
+
 		
 	else:
 		
-		amsnr = 0
+		#Zu der ueberprueften Karte konnte kein Eintrag gefunden werden
+		c.execute(card_error, ('Karte: ' + card + ' wurde nicht gefunden'))
+		db.commit()
 	
-	
+
 print(card)
 	
 
