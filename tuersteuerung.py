@@ -68,7 +68,12 @@ def time2min(x):
 
 #Funktion zum oeffnen der Tuer
 def dooropen():
-	print("Tuer Offen")
+	print('Tuer geoeffnet fuer: ' + user[0])
+	
+	
+	#c.execute(log_scriptstart)
+	#db.commit()
+	
 	#Schieberegister ansteuern
 	#LEDs schalten
 	#Display beschriften
@@ -189,7 +194,7 @@ if card in config.mastercards:
 	db.commit()
 	
 	##--- E-Mail versenden
-	dooropen(config.mastercards[card])
+	dooropen()
 	##--- LEDs steuern
 
 else:
@@ -208,7 +213,7 @@ else:
 			#print(permission)
 		else:
 			#Fehler ins Log schreiben: keine Berechtigungen definiert
-			c.execute(card_error, ('Keine Berechtigung fuer KARTE: ' + card +  'und AMS NR: ' + amsnr + ' definiert.'))
+			c.execute(log_carderror, ('Keine Berechtigung fuer KARTE: ' + card +  'und AMS NR: ' + amsnr + ' definiert.'))
 			db.commit()
 		
 		#Daten aus AMS Datenbank ababfragen
@@ -218,7 +223,7 @@ else:
 		else:
 			print("Fehler")
 			#Fehler ins log schreiben
-			c.execute(card_error, ('Keine AMS Daten fuer KARTE: ' + card + ' und AMS NR: ' + amsnr + 'definiert'))
+			c.execute(log_carderror, ('Keine AMS Daten fuer KARTE: ' + card + ' und AMS NR: ' + amsnr + 'definiert'))
 			db.commit()
 		
 		
@@ -234,6 +239,7 @@ else:
 				dooropen()
 			else:
 				print("Ausserhalb oeffnungszeiten")
+				#Blinccodes Tuer
 		
 		#gesperrt
 		if permission == 'gesperrt':
@@ -244,9 +250,12 @@ else:
 	else:
 		
 		#Zu der ueberprueften Karte konnte kein Eintrag gefunden werden
-		c.execute(card_error, ('Karte: ' + card + ' wurde nicht gefunden'))
+		c.execute(log_carderror, ('Karte: ' + card + ' wurde nicht gefunden'))
 		db.commit()
-	
+		print("Karte nicht erkannt")
+		#Rueckmeldung blikncodes Tuer
+		
+		
 
 print(card)
 	
