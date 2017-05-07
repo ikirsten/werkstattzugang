@@ -1,4 +1,4 @@
-rt holidays
+import holidays
 
 #---Access times---
 
@@ -11,9 +11,14 @@ accesstimes = dict(
 	endbefore	= '00:10', #Letzerzugang vor Ende Eintrittszeit
 )
 
+doorprogramm = dict(
+	mastercards = {12345678: "Master1", 23456789: "Master2",}
+ #Karten fuer Tueroeffnung ohne pruefung
+
 database = dict(
 	username	= 'testamspi',
 	password	= 'Qnu4g34!',
 	host		= 'amsev.de',
 	databasename	= 'testwerke',
 )
+

@@ -11,6 +11,9 @@ import rfidiot
 from datetime import date
 
 
+
+
+##Defintion der Funktionen
 #Uid aus Cardreader lesen
 def getuid():
 	card=rfidiot.card
@@ -26,7 +29,6 @@ def getuid():
 	card.select()
 	return card.uid
 	
-
 
 def timecheck():
 
@@ -58,8 +60,21 @@ def timecheck():
 
 	#Rueckgabe des Ergebniss	
 	return bool(check)
+
+
 def time2min(x):
-   return reduce(lambda a, b: 60 * int(a) + int(b), x.split(':'))
+	return reduce(lambda a, b: 60 * int(a) + int(b), x.split(':'))
+
+
+#Funktion zum oeffnen der Tuer
+def dooropen(name):
+	print("Tuer Offen")
+	#Schieberegister ansteuern
+	#LEDs schalten
+	#Display beschriften
+
+
+
 
 
 ##Eventprozedur
@@ -68,6 +83,11 @@ def time2min(x):
 ##Eventdeklarationen
 #Beispieldeklaration
 #GPIO.add_event_detect(18, GPIO.BOTH, callback = doIfHigh, bouncetime = 200)
+
+
+
+
+
 
 
 
@@ -80,6 +100,14 @@ db = MySQLdb.connect(	host=config.database['host'],
 
 #Cursor Object
 c=db.cursor()
+
+
+
+
+
+
+
+
 
 
 
@@ -103,7 +131,15 @@ log_rootcard = """
 INSERT INTO werkelog (
 typ, meldung)
 Values
-('TUER', 'ROOT Card: ' %s ' gelesen.');""" 
+('TUER', 'ROOT Card: ' %s ' gelesen.');"""
+
+#Log Kartenfehler
+log_carderror ="""
+INSERT INTO werkelog (
+typ, meldung)
+VALUES
+('TUER', 'ERROR: ' %s);""" 
+
 
 
 ##SQL Suchabrfagen Definition
@@ -115,6 +151,19 @@ SELECT ams_nr FROM cards WHERE cards_uid = %s"""
 #Berechtigungen der AMSID suchen
 search_permission = """
 select berechtigung FROM cards_userrights WHERE ams_nr = %s"""
+
+#User der AMSID suchen
+search:user = """
+select vorname, nachname, email, mobil FROM ams_mitglieder WHERE ams_nr = %s"""
+
+
+
+
+
+
+
+
+
 
 #Testablauf
 
@@ -139,19 +188,38 @@ if card in config.mastercards:
 	c.execute(log_rootcard, (config.mastercards[card]))
 	db.commit()
 	
-	##--- Tuer oeffnen
 	##--- E-Mail versenden
+´	dooropen(config.mastercards[card])
 	##--- LEDs steuern
 
 else:
-	#Pueren, ob uid in DB
+	#Pruefen, ob uid in DB und attribute eruieren
 	if c.execute(search_uid, (card)):
+
 		#Wenn UID in DB, amsid abfragen
 		amsnr = str(c.fetchone()[0])
 		print(amsnr)
+
+		#Berechtigung pruefen und Abfragen
 		if c.execute(search_permission, (amsnr)):
 			permission = str(c.fetchone()[0])
 			print(permission)
+		else:
+			#Fehler ins Log schreiben: keine Berechtigungen definiert
+			c.execute(card_error, ('Keine Berechtigung fuer KARTE: ' card ' und AMS NR: ' amsnr '  definiert.')
+			db.commit()
+		
+		#Daten aus AMS Datenbank ababfragen
+		if c.execute(search_permission, (amsnr)):
+			user-vorname = str(c.fetchone() [0])
+			user-nachname = str(c.fetchone() [1])
+			user-email = str(c.fetchone() [2])
+			user-mobil = str(c.fetchone() [3])
+			print(user-vorname ' ' user-nachname ' ' user-email ' ' user-mobil)
+		
+	else:
+		
+		amsnr = 0
 	
 	
 print(card)
