@@ -22,3 +22,5 @@ database = dict(
 	databasename	= 'testwerke',
 )
 
+#Pfad AMS-Daten
+amsdaten = 'AMS_Daten.xlsx'
