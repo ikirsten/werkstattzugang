@@ -1,3 +1,8 @@
+#SPI aktivieren
+in /boot/config.txt - Uncomment:
+#dtparam=spi=on
+
+
 #Python Libarys
 
 pip install holidays
