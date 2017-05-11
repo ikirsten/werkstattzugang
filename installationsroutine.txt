@@ -1,6 +1,7 @@
 #Python Libarys
 
 pip install holidays
+pip install spidev
 
 https://github.com/AdamLaurie/RFIDIOtys
 
