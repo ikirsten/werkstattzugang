@@ -1,5 +1,6 @@
 #--import---
 import config #config file
+import registercontrol #74HC595 Big Banging Steuerung
 
 import os #OS module
 import MySQLdb #MySQL connection library 
@@ -21,7 +22,9 @@ import RPi.GPIO as GPIO #Library zur Ansteuerung der Pins
 GPIO.setmode(GPIO.BOARD)
 
 #PIN Definitionen
-GPIO.setup(7, GPIO.IN) # TUER Input
+GPIO.setup(config.pinstuer['tuerstatus'], GPIO.IN) # TUER Input
+GPIO.setup(config.pinstuer['notschalter'], GPIO.IN) #Notschlater Input
+registercontrol.pinsetup('tuer')
 
 
 
@@ -32,6 +35,11 @@ GPIO.setup(7, GPIO.IN) # TUER Input
 def getuid():
 	card=rfidiot.card
 	card.select()
+
+	#LED gruen schalten 
+	global reader 
+	reader = 'green'
+	registercontrol.writepins('tuer', tuerreginput())
 	
 	#Schleife - wenn keine uid vorhanden so lange lesen bis uid vorhanden, nach jedem Versuch 0.1 sek warten
 	while not card.uid:
@@ -41,8 +49,29 @@ def getuid():
 
 	card=rfidiot.card
 	card.select()
+
+	#LED rot schalten
+	reader = 'red'
+	registercontrol.writepins('tuer', tuerreginput())
+
 	return card.uid
-	
+
+def tuerreginput():
+	if reader == 'red':
+		r3 = [1,0]
+	if reader == 'green':
+		r3 = [0,1]
+	if tuerstatus == 'red':
+		r4 = [1,0]
+	if tuerstatus == 'green':
+		r4 = [0,1]
+	if notschalter == 'red':
+		r5 = [1,0]
+	if notschalter == 'green':
+		r5 = [0,1]
+	#print(tuerctl)
+	#print(r5+r4+r3+warnlicht+tuerctl)
+	return(r5+r4+r3+warnlicht+tuerctl)
 
 def timecheck():
 
@@ -82,8 +111,12 @@ def time2min(x):
 
 #Funktion zum oeffnen der Tuer
 def dooropen():
+	global tuerctl
 	print('Tuer geoeffnet fuer: ' + user[0])
 	
+	#Tuer oeffnen
+	tuerctl = [1] #Tuer offen
+	registercontrol.writepins('tuer', tuerreginput())
 	
 	#c.execute(log_scriptstart)
 	#db.commit()
@@ -92,10 +125,14 @@ def dooropen():
 	#LEDs schalten
 	#Display beschriften
 
-
-
-
-
+def showblinkcodes (anzahl):
+	global warnlicht
+	global tuerctl
+	for y in range(0,anzahl):
+		time.sleep(0.5)
+		registercontrol.writepins('tuer', [0,0,0,0,0,0]+warnlicht+tuerctl)
+		time.sleep(0.5)
+		registercontrol.writepins('tuer', tuerreginput())
 
 
 
@@ -103,13 +140,42 @@ def dooropen():
 
 
 ##Eventdeklarationen
-def tuer(x):
-	print(x)
-	print('Tuerstatus veraendert')
+def tueraufzu(x):
+	global tuerstatus
+	time.sleep(0.1)
+	if GPIO.input(x):
+		tuerstatus = 'red'
+	else:
+		tuerstatus = 'green'
+	
+	registercontrol.writepins('tuer', tuerreginput())
+	print(tuerstatus)
+	print(tuerreginput())
+	print('Tuerstatus veraendert :' , GPIO.input(x))
 
 
 #Beispieldeklaration
-GPIO.add_event_detect(7, GPIO.BOTH, callback = tuer, bouncetime = 2000)
+GPIO.add_event_detect(config.pinstuer['tuerstatus'], GPIO.BOTH, callback = tueraufzu, bouncetime = 1000)
+#GPIO.add_event_detect(config.pinstuer['tuerstatus'], GPIO.FALLING, callback = tuerauf, bouncetime = 200)
+
+
+
+
+##Initialisierung
+tuerctl = [0] #Tuer zu
+warnlicht = [1] #Warnlicht aus
+reader = 'red'
+tuerstatus  = 'red'
+notschalter = 'red'
+if not GPIO.input(config.pinstuer['tuerstatus']):
+	tuerstatus = 'green'
+if GPIO.input(config.pinstuer['notschalter']):
+	notschalter = 'green'
+registercontrol.writepins('tuer',tuerreginput())
+
+
+
+
 
 
 
@@ -195,6 +261,8 @@ select vorname, nachname, email, mobil FROM ams_mitglieder WHERE ams_nr = %s"""
 #Testablauf
 
 
+showblinkcodes(1)
+
 #Log scriptstart schreiben
 c.execute(log_scriptstart)
 db.commit()
@@ -241,6 +309,7 @@ else:
 			#Fehler ins Log schreiben: keine Berechtigungen definiert
 			c.execute(log_carderror, ('Keine Berechtigung fuer KARTE: ' + card +  'und AMS NR: ' + amsnr + ' definiert.'))
 			db.commit()
+			showblinkcodes(5)
 		
 		#Daten aus AMS Datenbank ababfragen
 		if c.execute(search_user, (amsnr)):
@@ -251,6 +320,7 @@ else:
 			#Fehler ins log schreiben
 			c.execute(log_carderror, ('Keine AMS Daten fuer KARTE: ' + card + ' und AMS NR: ' + amsnr + 'definiert'))
 			db.commit()
+			showblinkcodes(6)
 		
 		
 		#Tueroffnungsszenarien nach Berechtigung
@@ -265,11 +335,13 @@ else:
 				dooropen()
 			else:
 				print("Ausserhalb oeffnungszeiten")
+				showblinkcodes(3)
 				#Blinccodes Tuer
 		
 		#gesperrt
 		if permission == 'gesperrt':
 			print()
+			showblinkcodes(4)
 		
 
 		
@@ -279,6 +351,7 @@ else:
 		c.execute(log_carderror, ('Karte: ' + card + ' wurde nicht gefunden'))
 		db.commit()
 		print("Karte nicht erkannt")
+		showblinkcodes(2)
 		#Rueckmeldung blikncodes Tuer
 		
 		
@@ -292,3 +365,4 @@ print(card)
 
 c.close()
 db.close()
+GPIO.cleanup()
