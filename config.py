@@ -22,5 +22,17 @@ database = dict(
 	databasename	= 'testwerke',
 )
 
+
+#Pindeklarationen (GPIO = Board --> Pysikalische Pinnummern)
+pinstuer = dict(
+	tuerstatus	= 7,	#Eingang Tuer (Offen/Zu)
+	register-ser	= 11,	#Register Serieller Eingang
+	register-sck	= 13,	#Register Schiebetakt
+	register-rck	= 15,	#Register Speichertakt
+)
+
+
+
+
 #Pfad AMS-Daten
 amsdaten = 'AMS_Daten.xlsx'

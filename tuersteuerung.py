@@ -5,10 +5,24 @@ import os #OS module
 import MySQLdb #MySQL connection library 
 import time #time module
 import holidays # python library holdiays
-import rfidiot
-
+import rfidiot #rfidiot library zur Steurung des Readers und autom. auslesen der UID
 
 from datetime import date
+
+import RPi.GPIO as GPIO #Library zur Ansteuerung der Pins
+
+
+
+
+
+###GPIO Steuerung
+
+#Setzte Physikalische Pin Nummerierung
+GPIO.setmode(GPIO.BOARD)
+
+#PIN Definitionen
+GPIO.setup(7, GPIO.IN) # TUER Input
+
 
 
 
@@ -82,12 +96,20 @@ def dooropen():
 
 
 
+
+
+
 ##Eventprozedur
 
 
 ##Eventdeklarationen
+def tuer(x):
+	print(x)
+	print('Tuerstatus veraendert')
+
+
 #Beispieldeklaration
-#GPIO.add_event_detect(18, GPIO.BOTH, callback = doIfHigh, bouncetime = 200)
+GPIO.add_event_detect(7, GPIO.BOTH, callback = tuer, bouncetime = 2000)
 
 
 
@@ -189,11 +211,15 @@ db.commit()
 
 #Pruefen ob root Karte
 if card in config.mastercards:
+	user = 'MASTER', config.mastercards[card]
+	
 	#Ins Log schreiben
 	c.execute(log_rootcard, (config.mastercards[card]))
 	db.commit()
 	
+	
 	##--- E-Mail versenden
+	print(user[0])
 	dooropen()
 	##--- LEDs steuern
 
