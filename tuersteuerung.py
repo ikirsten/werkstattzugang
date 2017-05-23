@@ -7,6 +7,7 @@ import MySQLdb #MySQL connection library
 import time #time module
 import holidays # python library holdiays
 import rfidiot #rfidiot library zur Steurung des Readers und autom. auslesen der UID
+import smtplib #Library zum versenden von E-mails
 
 from datetime import date
 
@@ -198,7 +199,15 @@ def tueraufzu(x):
 	if GPIO.input(x):
 		tuerstatus = 'off'
 	else:
+		#Tuer offen
 		tuerstatus = 'green'
+		#Pruefen, ob Anmeldung vorliegt
+		if tuerctl == [0]:
+			#Fehler im System
+			print("Tuer ohne anmeldung geoeffnet")
+			c.execute(log_carderror,('TUER OHNE ANMELDUNG OFFEN'))
+			showblinkcodes(10)
+		
 	
 	registercontrol.writepins('tuer', tuerreginput())
 	print('Tuerstatus veraendert :' , GPIO.input(x))

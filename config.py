@@ -33,7 +33,14 @@ pinstuer = dict(
 	registerrck	= 15,	#Register Speichertakt
 )
 
-
+#E-Mail Einstellungen
+email = dict(
+	werkstattwart	= 'werkstattwart@amsev.de', #Weiterleitung auf aktuellen Werkstattwart
+	vorstand	= 'vorstand@amsev.de',	#Benachrichtigung des Vorstands
+	sender		= 'werkstatt@amsev.de', #Absender
+	smtpserver	= 'amsev.de'
+	smtuser		= 'werkstatt@amsev.de'
+	smtppasswort	= 'vp0a^6C3'
 
 
 #Pfad AMS-Daten
