@@ -35,7 +35,7 @@ c=db.cursor()
 #Werte von User abfragen
 ams = int(input("AMS-Mitgliedsnummer: "))
 
-role = raw_input("Berechtigung: ")
+#role = raw_input("Berechtigung: ")
 
 carduid = getuid()
 print(carduid)
@@ -56,5 +56,5 @@ Values
 
 
 c.execute(adduser, (ams,carduid))
-c.execute(setuserrights, (ams,role))
+#c.execute(setuserrights, (ams,role))
 db.commit()
