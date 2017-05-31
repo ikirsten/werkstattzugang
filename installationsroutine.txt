@@ -3,6 +3,10 @@ in /boot/config.txt - Uncomment:
 #dtparam=spi=on
 
 
+#IPv6 aktivieren
+in /etc/modules "ipv6" einfügen
+
+
 #Python Libarys
 
 pip install holidays
