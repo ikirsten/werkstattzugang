@@ -4,7 +4,6 @@ from email.mime.text import MIMEText
 import socket
 socket.has_ipv6
 import sys
-#test
 
 #Script zum Versenden von E-Mails
 

@@ -266,6 +266,10 @@ db = MySQLdb.connect(	host=config.database['host'],
 			passwd=config.database['password'],
 			db=config.database['databasename'])
 
+#db ping
+db.ping(True)
+
+
 #Cursor Object
 c=db.cursor()
 
@@ -349,7 +353,6 @@ c.execute(log_scriptstart)
 db.commit()
 emails.sendmail(config.email['werkstattwart'],'Tuersteuerung gestartet','Die Tuersteuerung der Werkstatt wurde gestartet')
 
-
 #Dauerschleife initalisieren
 try:
 	while True:
@@ -358,6 +361,7 @@ try:
 		card = getuid()
 		
 		#Gelesene Karte in Log-Datenbank schreiben
+		db.ping()
 		c.execute(log_cardread, (card))
 		db.commit()		
 		
