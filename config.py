@@ -38,10 +38,10 @@ email = dict(
 	werkstattwart	= 'werkstattwart@amsev.de', #Weiterleitung auf aktuellen Werkstattwart
 	vorstand	= 'vorstand@amsev.de',	#Benachrichtigung des Vorstands
 	sender		= 'werkstatt@amsev.de', #Absender
-	smtpserver	= 'amsev.de'
-	smtuser		= 'werkstatt@amsev.de'
-	smtppasswort	= 'vp0a^6C3'
-
+	smtpserver	= 'amsev.de', #AMS Server
+	smtpuser	= 'werkstatt@amsev.de',
+	smtppasswort	= 'Teag14_9'
+)
 
 #Pfad AMS-Daten
 amsdaten = 'AMS_Daten.xlsx'
