@@ -1,6 +1,7 @@
 #--import---
 import config #config file
 import registercontrol #74HC595 Big Banging Steuerung
+import emails #Scrpit fuer das Versenden von E-Mails
 
 import os #OS module
 import MySQLdb #MySQL connection library 
@@ -122,14 +123,25 @@ def dooropen():
 	#Tuer oeffnen
 	tuerctl = [1] #Tuer offen
 	registercontrol.writepins('tuer', tuerreginput())
+
+	print(user[0])
+	print(user[2])
+	print(emails.wilkommen % user[0])
 	
+	#Ins Log schreiben
+	c.execute(log_control, 'Tuer fuer: ' + user[0] + 'freigegeben')
+	db.commit()
+	
+	#Wilkommnesemail senden
+	emails.sendmail(user[2], 'Wilkommen in der Werkstatt', emails.wilkommen % (user[0]))
+
+
 	while not GPIO.input(config.pinstuer['tuertaster']):
 		print('Schleife Tuer')
 		#Wenn Zeit kurz vor Ende, Warnlicht anschalten
 		if not timecheck ():
 			warnlicht = [0]
 			registercontrol.writepins('tuer', tuerreginput())
-			
 			
 			#warnlicht wieder ausschalten
 			#warnlicht = [1]
@@ -174,6 +186,8 @@ def doorclose():
 	warnlicht = [1] #Warnlicht aus
 	registercontrol.writepins('tuer', tuerreginput())
 
+	emails.sendmail(user[2], 'Auf Wiedersehen in der Werkstatt', emails.doorclose % (user[0]))
+
 	print('Tuer Schliessen')
 	
 
@@ -207,6 +221,8 @@ def tueraufzu(x):
 			print("Tuer ohne anmeldung geoeffnet")
 			c.execute(log_carderror,('TUER OHNE ANMELDUNG OFFEN'))
 			showblinkcodes(10)
+			#E-Mail senden
+			emails.sendmail(config.email['werkstattwart'], 'TUER OHNE ANMELDUNG OFFEN', 'Tuer wurde geoeffnet, ohne dass eine Anmeldung erfolgte')
 		
 	
 	registercontrol.writepins('tuer', tuerreginput())
@@ -292,6 +308,12 @@ typ, meldung)
 VALUES
 ('TUER', 'ERROR: ' %s);""" 
 
+#Easylog
+log_control ="""
+INSERT INTO werkelog (
+typ, meldung)
+VALUES
+('TUER', %s);"""
 
 
 ##SQL Suchabrfagen Definition
@@ -322,9 +344,10 @@ select vorname, nachname, email, mobil FROM ams_mitglieder WHERE ams_nr = %s"""
 
 showblinkcodes(1)
 
-#Log scriptstart schreiben
+#Log scriptstart schreiben und E-Mail senden
 c.execute(log_scriptstart)
 db.commit()
+emails.sendmail(config.email['werkstattwart'],'Tuersteuerung gestartet','Die Tuersteuerung der Werkstatt wurde gestartet')
 
 
 #Dauerschleife initalisieren
